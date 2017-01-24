@@ -11,8 +11,8 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
  
 // Create chat bot
 var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
+    appId: '9df91066-6576-42b9-a9c9-4365c6b349da',
+    appPassword: 'cUUU9vRcPiozuS1kn9CBasx'
 });
 var bot = new builder.UniversalBot(connector);
 server.post('https://qnaapp1.azurewebsites.net/api/messages', connector.listen());
