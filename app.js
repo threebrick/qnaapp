@@ -1,21 +1,40 @@
 var util = require('util');
 var _ = require('lodash');
 var builder = require('botbuilder');
-var restify = require('restify');
+//var restify = require('restify');
 
 // Setup Restify Server
-var server = restify.createServer(); 
-server.listen(process.env.port || process.env.PORT || 3978, function () {
-    console.log('%s listening to %s', server.name, server.url);
+//var server = restify.createServer(); 
+//server.listen(process.env.port || process.env.PORT || 3978, function () {
+//    console.log('%s listening to %s', server.name, server.url);
+//});
+
+// newly added code
+
+var botbuilder_azure = require("botbuilder-azure");
+
+var useEmulator = (process.env.NODE_ENV == 'development');
+
+var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure.BotServiceConnector({
+    appId: process.env['MicrosoftAppId'],
+    appPassword: process.env['MicrosoftAppPassword'],
+    stateEndpoint: process.env['BotStateEndpoint'],
+    openIdMetadata: process.env['BotOpenIdMetadata']
 });
 
-// Create chat bot
-var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
-});
 var bot = new builder.UniversalBot(connector);
-server.post('/api/messages', connector.listen());
+
+//
+
+
+
+// Create chat bot
+//var connector = new builder.ChatConnector({
+//    appId: process.env.MICROSOFT_APP_ID,
+//    appPassword: process.env.MICROSOFT_APP_PASSWORD
+//});
+//var bot = new builder.UniversalBot(connector);
+//server.post('/api/messages', connector.listen());
 
 // Root dialog, triggers search and process its results
 bot.dialog('/', [
@@ -52,6 +71,8 @@ var searchqna1 = SearchDialogLibrary.create('searchqna1', {
 
 bot.library(searchqna1);
 
+
+
 // Maps the AzureSearch RealState Document into a SearchHit that the Search Library can use
 function searchqna1ToSearchHit(searchqna1) {
     return {
@@ -62,4 +83,17 @@ function searchqna1ToSearchHit(searchqna1) {
         //,
         //imageUrl: realstate.thumbnail
     };
+}
+
+// newly added
+
+if (useEmulator) {
+    var restify = require('restify');
+    var server = restify.createServer();
+    server.listen(3978, function() {
+        console.log('test bot endpont at http://localhost:3978/api/messages');
+    });
+    server.post('/api/messages', connector.listen());    
+} else {
+    module.exports = { default: connector.listen() }
 }
