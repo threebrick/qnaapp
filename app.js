@@ -63,3 +63,8 @@ function searchqna1ToSearchHit(searchqna1) {
         //imageUrl: realstate.thumbnail
     };
 }
+
+server.get('/', restify.serveStatic({
+ directory: __dirname,
+ default: '/index.html'
+}));
