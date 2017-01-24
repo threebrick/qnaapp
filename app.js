@@ -56,8 +56,8 @@ bot.library(searchqna1);
 function searchqna1ToSearchHit(searchqna1) {
     return {
         key: searchqna1.id,
-        title: util.format('The keywords are - %s.',
-            searchqna1.keywords),
+        title: util.format('Question - %s.',
+            searchqna1.question),
         description: searchqna1.answer
         //,
         //imageUrl: realstate.thumbnail
