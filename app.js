@@ -15,7 +15,7 @@ var connector = new builder.ChatConnector({
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
 var bot = new builder.UniversalBot(connector);
-server.post('/api/messages', connector.listen());
+server.post('https://qnaapp1.azurewebsites.net/api/messages', connector.listen());
  
 // Root dialog, triggers search and process its results
 bot.dialog('/', [
