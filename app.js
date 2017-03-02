@@ -15,13 +15,13 @@ var connector = new builder.ChatConnector({
     appPassword: 'cUUU9vRcPiozuS1kn9CBasx'
 });
 var bot = new builder.UniversalBot(connector);
-server.post('https://qnaapp1.azurewebsites.net/api/messages', connector.listen());
+server.post('https://qnaapp2.azurewebsites.net/api/messages', connector.listen());
  
 // Root dialog, triggers search and process its results
 bot.dialog('/', [
     function (session) {
         // Trigger Search
-        session.beginDialog('searchqna1:/');
+        session.beginDialog('searchqna2:/');
     },
     function (session, args) {
         // Process selected search results
@@ -33,14 +33,15 @@ bot.dialog('/', [
  
 // Azure Search provider
 var AzureSearch = require('SearchProviders/azure-search');
-var azureSearchClient = AzureSearch.create('searchqna1', '1EA0B804219EEC0AEF8A4FF113A3461B', 'qna-index');
+//var azureSearchClient = AzureSearch.create('searchqna2', '1EA0B804219EEC0AEF8A4FF113A3461B', 'qna-index');
+var azureSearchClient = AzureSearch.create('searchqna2', '3771FE62C21D964C86D9B4832A1B5D9B', 'qna-index');
  
 /// <reference path="../SearchDialogLibrary/index.d.ts" />
 var SearchDialogLibrary = require('SearchDialogLibrary');
  
 // RealState Search
 var searchqna1ResultsMapper = SearchDialogLibrary.defaultResultsMapper(searchqna1ToSearchHit);
-var searchqna1 = SearchDialogLibrary.create('searchqna1', {
+var searchqna1 = SearchDialogLibrary.create('searchqna2', {
     multipleSelection: true,
     search: (query) => azureSearchClient.search(query).then(searchqna1ResultsMapper),
     refiners: ['category'],
